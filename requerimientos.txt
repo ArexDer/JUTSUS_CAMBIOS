@@ -1,0 +1,43 @@
+Aqui se va a llevar a cabo la documentacion y pasos que se estan manteniendo
+en el proyecto
+
+
+.............................................
+Se esta trabajando con py version: 3.11.9
+
+
+..............................................
+Instalar las dependencias para que el codigo funcione correctamente.
+
+pip install mediapipe opencv-python numpy
+
+...............................................
+GUIA DE POSTURAS DE manos
+          
+
+
+
+DATASET
+De momento usamos un dataset de prueba hasta alimentarlo con nuestras imagenes
+https://www.kaggle.com/datasets/vikranthkanumuru/naruto-hand-sign-dataset?resource=download
+
+Dataset de postura de manos JUTSUS
+
+
+.........................................
+EL orden de ejecucion de los codigos
+
+main.py 
+#Para visualizar como esta en timepo real los nodos de las manos con la camara.
+
+interpretado_datos_manos.py
+#Para cargar el dataset y hacer un csv con los datos de registro de las posturas de las manos.
+
+entrenamiento.py
+#Precisión del modelo: 95.56%
+
+
+deteccion_tiempo_real.py
+#Me detecta las manos 
+
+
