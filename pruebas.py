@@ -6,13 +6,16 @@ import time
 import random
 from collections import deque
 
-# Cargar el modelo entrenado
-knn = joblib.load("modelo_knn.pkl")
+# Cargar el modelo y el escalador
+try:
+    knn = joblib.load("modelo_knn.pkl")
+    scaler = joblib.load("scaler.pkl")
+except FileNotFoundError:
+    print("Error: No se encontraron los archivos del modelo ('modelo_knn.pkl' o 'scaler.pkl').")
+    exit()
 
 # Definir los jutsus y sus secuencias
-#"Suiton: Suiryūdan no Jutsu": ["tiger", "snake", "rabbit", "dog", "dog", "dragon"],
 jutsus = {
-    
     "Katon: Gōkakyū no Jutsu": ["snake", "ram", "monkey", "boar", "boar", "horse", "tiger"],
     "Kage Bunshin no Jutsu": ["ram", "snake", "tiger"]
 }
@@ -51,7 +54,11 @@ while cap.isOpened():
 
     if results.multi_hand_landmarks:
         for hand_landmarks in results.multi_hand_landmarks:
+            # Extraer landmarks y normalizarlos
             landmarks = np.array([[lm.x, lm.y, lm.z] for lm in hand_landmarks.landmark]).flatten().reshape(1, -1)
+            landmarks = scaler.transform(landmarks)  # Normalización
+
+            # Realizar predicción
             prediction = knn.predict(landmarks)[0]
 
             tiempo_actual = time.time()
@@ -66,24 +73,20 @@ while cap.isOpened():
             cv2.putText(frame, prediction, (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
             mp_draw.draw_landmarks(frame, hand_landmarks, mp_hands.HAND_CONNECTIONS)
 
-    # Calcular el ancho total de los rectángulos
-    rect_width = 80  # Tamaño más pequeño
+    # Dibujar secuencia de jutsu en la pantalla
+    rect_width = 80
     rect_height = 60
-    spacing = 10  # Espacio entre rectángulos
+    spacing = 10
     total_width = len(secuencia_correcta) * (rect_width + spacing) - spacing
-
-    # Punto de inicio para centrar los rectángulos en la ventana
     start_x = (width - total_width) // 2
-    start_y = height - 100  # Ubicarlo en la parte inferior
+    start_y = height - 100
 
-    # Dibujar la secuencia correcta con nombres centrados
     for i, postura in enumerate(secuencia_correcta):
         color = (255, 255, 255) if i >= len(posturas_detectadas) else (0, 255, 0)
         x1, y1 = start_x + i * (rect_width + spacing), start_y
         x2, y2 = x1 + rect_width, y1 + rect_height
         cv2.rectangle(frame, (x1, y1), (x2, y2), color, -1)
 
-        # Centrando el texto dentro del rectángulo
         text_size = cv2.getTextSize(postura, cv2.FONT_HERSHEY_SIMPLEX, 0.6, 2)[0]
         text_x = x1 + (rect_width - text_size[0]) // 2
         text_y = y1 + (rect_height + text_size[1]) // 2
