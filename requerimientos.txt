@@ -40,4 +40,7 @@ entrenamiento.py
 deteccion_tiempo_real.py
 #Me detecta las manos 
 
+******************************************
+Para el sonido importar la libreria con el comando: pip install pygame
+
 
