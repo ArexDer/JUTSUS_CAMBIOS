@@ -7,7 +7,7 @@ import wave
 import json
 import sounddevice as sd
 import numpy as np
-from vosk import Model, KaldiRecognizer
+# from vosk import Model, KaldiRecognizer
 
 def iniciar_pruebas():
     ventana.destroy()  # Cerrar la ventana principal
@@ -21,40 +21,40 @@ def iniciar_pruebas():
     except Exception as e:
         print(f"Error al ejecutar pruebas.py: {e}")
 
-def deteccion_voz():
-    ventana.destroy()  # Cerrar la ventana principal
+# def deteccion_voz():
+#     ventana.destroy()  # Cerrar la ventana principal
 
-    # Cargar el modelo de Vosk con una ruta absoluta
-    model_path = "d:/ANDDY/UCE/9noSemestre/MineriaDeDatos/Proyecto_Final/JUTSUS_CAMBIOS/vosk-model-small-es-0.42"
-    model = Model(model_path)
+#     # Cargar el modelo de Vosk con una ruta absoluta
+#     model_path = "d:/ANDDY/UCE/9noSemestre/MineriaDeDatos/Proyecto_Final/JUTSUS_CAMBIOS/vosk-model-small-es-0.42"
+#     model = Model(model_path)
 
-    recognizer = KaldiRecognizer(model, 16000)
+#     recognizer = KaldiRecognizer(model, 16000)
 
-    # Listar dispositivos de audio disponibles
-    print(sd.query_devices())
+#     # Listar dispositivos de audio disponibles
+#     print(sd.query_devices())
 
-    # Especificar el dispositivo de entrada (ajusta el índice según el dispositivo que desees usar)
-    device_index = 1  # Ajusta este índice según el dispositivo que desees usar
-    device_info = sd.query_devices(device_index, kind='input')
-    print(f"Usando dispositivo de entrada: {device_info['name']}")
+#     # Especificar el dispositivo de entrada (ajusta el índice según el dispositivo que desees usar)
+#     device_index = 1  # Ajusta este índice según el dispositivo que desees usar
+#     device_info = sd.query_devices(device_index, kind='input')
+#     print(f"Usando dispositivo de entrada: {device_info['name']}")
 
-    def callback(indata, frames, time, status):
-        if status:
-            print(status)
-        # Convertir los datos de audio a bytes antes de pasarlos a AcceptWaveform
-        audio_data = np.frombuffer(indata, dtype=np.int16).tobytes()
-        if recognizer.AcceptWaveform(audio_data):
-            result = recognizer.Result()
-            result_dict = json.loads(result)
-            texto = result_dict.get("text", "")
-            print(f"Has dicho: {texto}")
-            if "iniciar" in texto.lower():
-                iniciar_pruebas()
+#     def callback(indata, frames, time, status):
+#         if status:
+#             print(status)
+#         # Convertir los datos de audio a bytes antes de pasarlos a AcceptWaveform
+#         audio_data = np.frombuffer(indata, dtype=np.int16).tobytes()
+#         if recognizer.AcceptWaveform(audio_data):
+#             result = recognizer.Result()
+#             result_dict = json.loads(result)
+#             texto = result_dict.get("text", "")
+#             print(f"Has dicho: {texto}")
+#             if "iniciar" in texto.lower():
+#                 iniciar_pruebas()
 
-    print("Di 'iniciar' para comenzar...")
-    with sd.RawInputStream(samplerate=16000, blocksize=8000, dtype='int16',
-                           channels=1, callback=callback, device=device_index):
-        sd.sleep(1000000)
+#     print("Di 'iniciar' para comenzar...")
+#     with sd.RawInputStream(samplerate=16000, blocksize=8000, dtype='int16',
+#                            channels=1, callback=callback, device=device_index):
+#         sd.sleep(1000000)
 
 def on_enter(e):
     e.widget['background'] = 'black'
@@ -98,10 +98,10 @@ boton1_window = canvas.create_window(ancho_ventana//2, alto_ventana//2 - 20, anc
 boton1.bind("<Enter>", on_enter)
 boton1.bind("<Leave>", on_leave)
 
-boton2 = tk.Button(ventana, text="Detección de Voz", command=deteccion_voz, bg="blue", fg="white")
-boton2_window = canvas.create_window(ancho_ventana//2, alto_ventana//2 + 20, anchor="center", window=boton2)
-boton2.bind("<Enter>", on_enter2)
-boton2.bind("<Leave>", on_leave2)
+# boton2 = tk.Button(ventana, text="Detección de Voz", command=deteccion_voz, bg="blue", fg="white")
+# boton2_window = canvas.create_window(ancho_ventana//2, alto_ventana//2 + 20, anchor="center", window=boton2)
+# boton2.bind("<Enter>", on_enter2)
+# boton2.bind("<Leave>", on_leave2)
 
 # Iniciar el bucle principal de la interfaz
 ventana.mainloop()
